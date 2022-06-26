@@ -13,15 +13,13 @@ struct SearchAnimeView: View {
 
     var body: some View {
         List {
-            ForEach($animeStore.animeCollection.data, id: \.node.id) { $anime in
-                NavigationLink(destination: AnimeDetailView(anime: $anime.node)) {
-                    HStack {
-                        Text(anime.node.title)
-                        Spacer()
-                    }
+            ForEach(animeStore.searchCollection.data, id: \.node.id) { anime in
+                NavigationLink(destination: AnimeDetailView(anime: anime.node)) {
+                    AnimeSearchItem(anime: anime.node)
                 }
             }
         }
+        .listStyle(.plain)
         .navigationTitle("Search Animes")
         .searchable(text: $searchText, prompt: "Search by title")
         .onSubmit(of: .search) {

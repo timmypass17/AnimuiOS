@@ -9,13 +9,26 @@ import SwiftUI
 
 struct AnimeListView: View {
     @EnvironmentObject var animeStore: AnimeStore
-    @State private var isPresentingNewAnimeView = false
+    @State private var searchText: String = ""
 
     var body: some View {
-        VStack {
-            Text("Hello, World!")
+        List {
+            ForEach(animeStore.animeCollection.data, id: \.node.id) { anime in
+                NavigationLink(destination: AnimeDetailView(anime: anime.node)) {
+                    AnimeSearchItem(anime: anime.node)
+                }
+            }
         }
-        .navigationTitle("Anime List")
+        .listStyle(.plain)
+        .searchable(text: $searchText, prompt: "Search by title")
+        .onSubmit(of: .search) {
+            print("onSubmit: \(searchText)")
+            Task {
+                // Filter user's list
+            }
+        }
+        .navigationTitle("My Anime List")
+        .searchable(text: $searchText)
         .toolbar {
             ToolbarItem(placement: .navigationBarTrailing) {
                 NavigationLink(destination: SearchAnimeView()
