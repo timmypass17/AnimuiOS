@@ -76,7 +76,7 @@ struct AnimeDetailView: View {
             .padding()
             .sheet(isPresented: $isPresentingCreateReview) {
                 NavigationView {
-                    CreateReviewView(newReview: $animeStore.currentReview)
+                    CreateReviewView(newReview: $animeStore.currentReview, isPresentingCreateReview: $isPresentingCreateReview, anime: anime)
                         .navigationTitle(anime.title)
                         .toolbar {
                             ToolbarItem(placement: .cancellationAction) {
@@ -103,7 +103,6 @@ struct AnimeDetailView: View {
                     Button(action: { animeStore.addAnime(anime: anime) }) {
                         Image(systemName: "heart")
                     }
-                    .disabled(containsAnime(anime: anime))
                 }
             }
             .navigationTitle(anime.title)
@@ -115,6 +114,7 @@ struct AnimeDetailView: View {
             }
         }
         .onDisappear {
+            // reset state variables
             animeStore.reviewCollection = ReviewCollection()
             animeStore.currentReview = Review()
         }

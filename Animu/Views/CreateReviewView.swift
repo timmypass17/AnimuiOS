@@ -8,7 +8,10 @@
 import SwiftUI
 
 struct CreateReviewView: View {
+    @EnvironmentObject var animeStore: AnimeStore
     @Binding var newReview: Review
+    @Binding var isPresentingCreateReview: Bool
+    let anime: Anime
     
     var body: some View {
         VStack(alignment: .leading) {
@@ -21,15 +24,34 @@ struct CreateReviewView: View {
                 Spacer()
                 Text("200 characters remaining")
             }
-            Button("Write a Review", action: {})
-                .padding()
-                .frame(maxWidth: .infinity)
-                .foregroundColor(.white)
-                .background(.blue)
-                .cornerRadius(4)
-                .padding(.top)
+            Button(action: {
+                animeStore.addReview(anime: anime, review: newReview)
+                isPresentingCreateReview = false
+            }) {
+                HStack {
+                    Spacer()
+                    Text("Write a Review")
+                    Spacer()
+                }
+            }
+            .contentShape(Rectangle())
+            .padding()
+            .frame(maxWidth: .infinity)
+            .foregroundColor(.white)
+            .background(.blue)
+            .cornerRadius(4)
+            .padding(.top)
+            
             Spacer()
-
+            HStack {
+                Spacer()
+                Button("Delete Review", role: .destructive) {
+                    animeStore.deleteReview(anime: anime)
+                    newReview = Review()
+                    isPresentingCreateReview = false
+                }
+                Spacer()
+            }
         }
         .padding()
     }
@@ -38,7 +60,7 @@ struct CreateReviewView: View {
 struct CreateReviewView_Previews: PreviewProvider {
     static var previews: some View {
         let sampleReview = Review(rating: "8.5", review: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.")
-        CreateReviewView(newReview: .constant(sampleReview))
+        CreateReviewView(newReview: .constant(sampleReview), isPresentingCreateReview: .constant(true), anime: AnimeCollection.sampleData[0].node)
             .preferredColorScheme(.dark)
     }
 }

@@ -236,23 +236,57 @@ class AnimeStore: ObservableObject {
     func refreshReviews(anime: Anime) {
         let db = Firestore.firestore()
 
-        // 1. Get user's current list
+        // 1. Get reviews collection
         db.collection("reviews")
             .document(String(anime.id))
             .getDocument { document, error in
                 guard let document = document else { return }
                 guard let reviews = try? document.data(as: ReviewCollection.self) else { return }
                                 
-                // 2. Store anime list locally
+                // 2. Store reviews locally
                 self.reviewCollection = reviews
                 
+                // 3. Find user's review
                 for review in reviews.reviews {
                     if review.id == self.currentUser.id {
+                        // 4. Update state variables
                         self.currentReview = review
                     }
                 }
                 print("Current Review: \(self.currentReview)")
             }
+    }
+    
+    func deleteReview(anime: Anime) {
+        let db = Firestore.firestore()
+
+        // 1. Get reviews collection
+        db.collection("reviews")
+            .document(String(anime.id))
+            .getDocument { document, error in
+                guard let document = document else { return }
+                guard var reviews = try? document.data(as: ReviewCollection.self) else { return }
+                
+                // 2. Remove user's review
+                for (i, review) in reviews.reviews.enumerated() {
+                    if review.username == self.currentUser.username {
+                        reviews.reviews.remove(at: i)
+                    }
+                }
+                
+                // 3. Update local review collection
+                self.reviewCollection = reviews
+                
+                // 4. Update firebase collection
+                do {
+                    try db.collection("reviews")
+                        .document(String(anime.id))
+                        .setData(from: reviews)
+                } catch {
+                    print("Error deleteing review: \(anime.title)")
+                }
+            }
+        
     }
     
 }
