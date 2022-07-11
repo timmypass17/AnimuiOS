@@ -13,6 +13,7 @@ struct Anime: Codable {
     var main_picture: AnimeMainPicture
     var num_episodes: Int
     var genres: [AnimeGenre]
+    var studios: [AnimeStudio]
     var mean: Float
     var rank: Int
     var start_season: AnimeSeason
@@ -20,6 +21,7 @@ struct Anime: Codable {
     
     struct AnimeMainPicture: Codable {
         var medium: String
+        var large: String
     }
     struct AnimeGenre: Codable {
         var name: String
@@ -27,6 +29,9 @@ struct Anime: Codable {
     struct AnimeSeason: Codable {
         var year: Int
         var season: String
+    }
+    struct AnimeStudio: Codable {
+        var name: String
     }
 }
 
@@ -46,9 +51,10 @@ extension AnimeCollection {
             node: Anime(
                 id: 21,
                 title: "One Piece",
-                main_picture: Anime.AnimeMainPicture(medium: "https://api-cdn.myanimelist.net/images/anime/6/73245.jpg"),
+                main_picture: Anime.AnimeMainPicture(medium: "https://api-cdn.myanimelist.net/images/anime/6/73245.jpg", large: "https://api-cdn.myanimelist.net/images/anime/6/73245.jpg"),
                 num_episodes: 973,
                 genres: [Anime.AnimeGenre(name: "Action"), Anime.AnimeGenre(name: "Adventure")],
+                studios: [Anime.AnimeStudio(name: "Toei Animation")],
                 mean: 8.42,
                 rank: 152,
                 start_season: Anime.AnimeSeason(year: 2015, season: "spring"),

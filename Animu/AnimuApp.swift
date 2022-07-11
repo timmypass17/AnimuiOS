@@ -36,6 +36,13 @@ struct AnimuApp: App {
                                     print("Calling loadAnimes()")
                                     animeStore.loadAnimes()
                                 }
+                                .toolbar {
+                                    ToolbarItem(placement: .navigationBarTrailing) {
+                                        Button(action: { selection = Tab.discover } ) {
+                                            Image(systemName: "plus")
+                                        }
+                                    }
+                                }
                         }
                         .tabItem { Label("List", systemImage: "list.bullet") }.tag(Tab.list)
                         

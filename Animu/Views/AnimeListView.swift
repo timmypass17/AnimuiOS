@@ -10,12 +10,26 @@ import SwiftUI
 struct AnimeListView: View {
     @EnvironmentObject var animeStore: AnimeStore
     @State private var searchText: String = ""
-
+    @State private var toggleLarge = true
+    
     var body: some View {
         List {
+            Toggle("Display Card", isOn: $toggleLarge)
             ForEach(animeStore.animeCollection.data, id: \.node.id) { anime in
                 NavigationLink(destination: AnimeDetailView(anime: anime.node)) {
-                    AnimeSearchItem(anime: anime.node)
+                    if toggleLarge {
+                        AnimeSearchItem(anime: anime.node)
+                    } else {
+                        HStack {
+                            Text(anime.node.title)
+                            Spacer()
+                            Text(String(format: "%.2f", anime.node.mean))
+                                .padding(4)
+                                .foregroundColor(.white)
+                                .background(.indigo)
+                                .cornerRadius(4)
+                        }
+                    }
                 }
             }
         }
@@ -29,14 +43,6 @@ struct AnimeListView: View {
         }
         .navigationTitle("My Anime List")
         .searchable(text: $searchText)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                NavigationLink(destination: SearchAnimeView()
-                    .environmentObject(animeStore)) {
-                    Image(systemName: "plus")
-                }
-            }
-        }
     }
 }
 
@@ -44,6 +50,7 @@ struct AnimeListView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             AnimeListView()
+                .environmentObject(AnimeStore())
         }
     }
 }

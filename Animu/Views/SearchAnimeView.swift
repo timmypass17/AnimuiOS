@@ -23,7 +23,6 @@ struct SearchAnimeView: View {
         .navigationTitle("Search Animes")
         .searchable(text: $searchText, prompt: "Search by title")
         .onSubmit(of: .search) {
-            print("onSubmit: \(searchText)")
             Task {
                 try await animeStore.fetchAnime(title: searchText)
             }

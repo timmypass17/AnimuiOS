@@ -6,56 +6,118 @@
 //
 
 import SwiftUI
+import FirebaseAuth
 
 struct AnimeDetailView: View {
     @EnvironmentObject var animeStore: AnimeStore
+    @State private var isPresentingCreateReview = false
+    @State private var isExpanded = false
     let anime: Anime
+
     var body: some View {
-        List {
-            Section(header: Text("Description")) {
+        // spacing: 0 to have more control for padding
+        ScrollView {
+            VStack(alignment: .leading, spacing: 0) {
+                Poster(url: URL(string: anime.main_picture.large))
+                    .frame(width: 150, height: 240)
                 HStack {
-                    Label("Title", systemImage: "timer")
-                    Spacer()
                     Text(anime.title)
+                        .font(.title)
+                    Text(String(format: "%.2f", anime.mean))
+                        .padding(4)
+                        .foregroundColor(.white)
+                        .background(.indigo)
+                        .cornerRadius(4)
                 }
+                .padding(.top)
+                Text(anime.synopsis)
+                    .foregroundColor(.secondary)
+                    .lineLimit(isExpanded ? nil : 4)
+                    .padding(.bottom)
+                    .onTapGesture {
+                        isExpanded.toggle()
+                    }
+                
                 HStack {
-                    Label("Episodes", systemImage: "timer")
-                    Spacer()
-                    Text("\(anime.num_episodes)") // 0 if ongoing
-                }
-                HStack {
-                    Label("Genre", systemImage: "timer")
-                    Spacer()
-                    ForEach(anime.genres.prefix(2), id: \.name) { genre in
-                        Text(genre.name)
+                    Text("Genre:")
+                    ForEach(anime.genres.prefix(4), id: \.name) { genre in
+                        Text("\(genre.name),")
+                            .foregroundColor(.secondary)
                     }
                 }
-            }
-            Section(header: Text("Statistics")) {
                 HStack {
-                    Label("Rating", systemImage: "timer")
-                    Spacer()
-                    Text(String(format: "%.2f", anime.mean))
+                    Text("Release:")
+                    Text(verbatim: "\(anime.start_season.season) \(anime.start_season.year)".capitalized)
+                        .foregroundColor(.secondary)
                 }
                 HStack {
-                    Label("Rank", systemImage: "timer")
-                    Spacer()
-                    Text("\(anime.rank)")
+                    Text("Studio:")
+                    ForEach(anime.studios, id: \.name) { studio in
+                        Text("\(studio.name),")
+                            .foregroundColor(.secondary)
+                    }
+                }
+                Divider()
+                    .padding([.top, .bottom])
+                Text("Reviews (\(animeStore.reviewCollection.reviews.count))")
+                    .font(.title2)
+                if animeStore.reviewCollection.reviews.count == 0 {
+                    Text("Be the first to review!")
+                        .foregroundColor(.secondary)
+                } else {
+                    // List of reviews
+                    ForEach(animeStore.reviewCollection.reviews, id: \.self) { review in
+                        ReviewItem(review: review)
+                            .padding(.top)
+                    }
+                }
+                Spacer()
+            }
+            .padding()
+            .sheet(isPresented: $isPresentingCreateReview) {
+                NavigationView {
+                    CreateReviewView(newReview: $animeStore.currentReview)
+                        .navigationTitle(anime.title)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Cancel") {
+                                    isPresentingCreateReview = false
+                                }
+                            }
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Done") {
+                                    isPresentingCreateReview = false
+                                    animeStore.addReview(anime: anime, review: animeStore.currentReview)
+                                }
+                            }
+                        }
                 }
             }
-            Button("Remove Anime", role: .destructive) { animeStore.removeAnime(anime: anime) }
-            .disabled(!containsAnime(anime: anime))
-        }
-        .navigationTitle(anime.title)
-        .toolbar {
-            ToolbarItem(placement: .navigationBarTrailing) {
-                Button(action: { animeStore.addAnime(anime: anime) }) {
-                    Image(systemName: "plus")
+            .toolbar {
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { isPresentingCreateReview = true }) {
+                        Image(systemName: "pencil")
+                    }
                 }
-                .disabled(containsAnime(anime: anime))
+                ToolbarItem(placement: .navigationBarTrailing) {
+                    Button(action: { animeStore.addAnime(anime: anime) }) {
+                        Image(systemName: "heart")
+                    }
+                    .disabled(containsAnime(anime: anime))
+                }
+            }
+            .navigationTitle(anime.title)
+            .navigationBarTitleDisplayMode(.inline)
+        }
+        .onAppear {
+            Task {
+                animeStore.refreshReviews(anime: anime)
             }
         }
-
+        .onDisappear {
+            animeStore.reviewCollection = ReviewCollection()
+            animeStore.currentReview = Review()
+        }
     }
     
     func containsAnime(anime: Anime) -> Bool {
@@ -64,6 +126,7 @@ struct AnimeDetailView: View {
                 return true
             }
         }
+
         return false
     }
 }
@@ -74,6 +137,8 @@ struct AnimeDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationView {
             AnimeDetailView(anime: AnimeCollection.sampleData[0].node)
+                .environmentObject(AnimeStore())
         }
     }
 }
+

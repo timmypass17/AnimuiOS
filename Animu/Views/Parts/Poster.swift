@@ -19,7 +19,7 @@ struct Poster: View {
                     .overlay {
                         RoundedRectangle(cornerSize: CGSize(width: 8, height: 8)).stroke(.white)
                     }
-                    .shadow(radius: 5)
+                    .shadow(radius: 4)
 
             } else if phase.error != nil {
                 Color.red
