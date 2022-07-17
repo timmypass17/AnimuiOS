@@ -7,6 +7,7 @@
 
 import SwiftUI
 import FirebaseAuth
+import AVFoundation
 
 struct AnimeDetailView: View {
     @EnvironmentObject var animeStore: AnimeStore
@@ -41,9 +42,13 @@ struct AnimeDetailView: View {
                 HStack {
                     Text("Genre:")
                     ForEach(anime.genres.prefix(4), id: \.name) { genre in
-                        Text("\(genre.name),")
-                            .foregroundColor(.secondary)
+                        if genre == anime.genres.last {
+                            Text("\(genre.name)")
+                        } else {
+                            Text("\(genre.name),")
+                        }
                     }
+                    .foregroundColor(.secondary)
                 }
                 HStack {
                     Text("Release:")
@@ -53,9 +58,13 @@ struct AnimeDetailView: View {
                 HStack {
                     Text("Studio:")
                     ForEach(anime.studios, id: \.name) { studio in
-                        Text("\(studio.name),")
-                            .foregroundColor(.secondary)
+                        if studio == anime.studios.last {
+                            Text("\(studio.name)")
+                        } else {
+                            Text("\(studio.name),")
+                        }
                     }
+                    .foregroundColor(.secondary)
                 }
                 Divider()
                     .padding([.top, .bottom])
@@ -84,10 +93,14 @@ struct AnimeDetailView: View {
                                     isPresentingCreateReview = false
                                 }
                             }
-                            ToolbarItem(placement: .confirmationAction) {
-                                Button("Done") {
+                            ToolbarItem(placement: .destructiveAction) {
+                                Button(action:  {
+                                    animeStore.deleteReview(anime: anime)
+                                    animeStore.currentReview = Review()
                                     isPresentingCreateReview = false
-                                    animeStore.addReview(anime: anime, review: animeStore.currentReview)
+                                    
+                                }) {
+                                    Image(systemName: "trash")
                                 }
                             }
                         }
@@ -96,12 +109,18 @@ struct AnimeDetailView: View {
             .toolbar {
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button(action: { isPresentingCreateReview = true }) {
-                        Image(systemName: "pencil")
+                        Image(systemName: "square.and.pencil")
                     }
                 }
                 ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: { animeStore.addAnime(anime: anime) }) {
-                        Image(systemName: "heart")
+                    Button(action: {
+                        if isFavorited(anime: anime) {
+                            animeStore.removeAnime(anime: anime)
+                        } else {
+                            animeStore.addAnime(anime: anime)
+                        }
+                    }) {
+                        Image(systemName: isFavorited(anime: anime) ? "heart.fill": "heart")
                     }
                 }
             }
@@ -120,7 +139,7 @@ struct AnimeDetailView: View {
         }
     }
     
-    func containsAnime(anime: Anime) -> Bool {
+    func isFavorited(anime: Anime) -> Bool {
         for node in animeStore.animeCollection.data {
             if node.node.id == anime.id {
                 return true

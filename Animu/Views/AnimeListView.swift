@@ -15,13 +15,16 @@ struct AnimeListView: View {
     var body: some View {
         List {
             Toggle("Display Card", isOn: $toggleLarge)
-            ForEach(animeStore.animeCollection.data, id: \.node.id) { anime in
+            ForEach(Array(animeStore.animeCollection.data.enumerated()), id: \.offset) { index, anime in
                 NavigationLink(destination: AnimeDetailView(anime: anime.node)) {
                     if toggleLarge {
                         AnimeSearchItem(anime: anime.node)
                     } else {
                         HStack {
+                            Text("\(index + 1).")
+                                .foregroundColor(.secondary)
                             Text(anime.node.title)
+                                .lineLimit(1)
                             Spacer()
                             Text(String(format: "%.2f", anime.node.mean))
                                 .padding(4)

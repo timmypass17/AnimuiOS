@@ -15,15 +15,32 @@ struct CreateReviewView: View {
     
     var body: some View {
         VStack(alignment: .leading) {
-            TextField("8.5", text: $newReview.rating)
+            HStack(alignment: .top) {
+                Image("waddle")
+                    .resizable()
+                    .frame(width: 60, height: 60)
+                    .clipShape(RoundedRectangle(cornerSize: CGSize(width: 8, height: 8)))
+                    .overlay {
+                        RoundedRectangle(cornerSize: CGSize(width: 8, height: 8)).stroke(.white)
+                    }
+                VStack(alignment: .leading) {
+                    Text(animeStore.currentUser.name)
+                    Text("@\(animeStore.currentUser.username)")
+                        .foregroundColor(.secondary)
+                }
+            }
             TextEditor(text: $newReview.review)
                 .border(.secondary)
                 .frame(height: 200)
                 .cornerRadius(4)
             HStack {
-                Spacer()
-                Text("200 characters remaining")
+                Text("Overall Rating:")
+                TextField("8.5", text: $newReview.rating)
             }
+//            HStack {
+//                Spacer()
+//                Text("200 characters remaining")
+//            }
             Button(action: {
                 animeStore.addReview(anime: anime, review: newReview)
                 isPresentingCreateReview = false
@@ -43,15 +60,16 @@ struct CreateReviewView: View {
             .padding(.top)
             
             Spacer()
-            HStack {
-                Spacer()
-                Button("Delete Review", role: .destructive) {
-                    animeStore.deleteReview(anime: anime)
-                    newReview = Review()
-                    isPresentingCreateReview = false
-                }
-                Spacer()
-            }
+//            HStack {
+//                Spacer()
+//                Button("Remove", role: .destructive) {
+//                    animeStore.deleteReview(anime: anime)
+//                    newReview = Review()
+//                    isPresentingCreateReview = false
+//                }
+//                .foregroundColor(.secondary)
+//                Spacer()
+//            }
         }
         .padding()
     }

@@ -14,12 +14,12 @@
 		3202FBDB2862AB9200C729D6 /* AnimeListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3202FBDA2862AB9200C729D6 /* AnimeListView.swift */; };
 		326344442863AA58002AA81C /* Anime.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326344432863AA58002AA81C /* Anime.swift */; };
 		326344492863F29C002AA81C /* SearchAnimeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 326344482863F29C002AA81C /* SearchAnimeView.swift */; };
+		327042F728820B990025094C /* FriendItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 327042F628820B990025094C /* FriendItem.swift */; };
 		32928F132864BA2300261F7A /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 32928F122864BA2300261F7A /* GoogleService-Info.plist */; };
 		32928F152864BD7300261F7A /* SignupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32928F142864BD7300261F7A /* SignupView.swift */; };
 		32928F172864C0E600261F7A /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32928F162864C0E600261F7A /* User.swift */; };
 		32928F1928656E0B00261F7A /* FriendListView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32928F1828656E0B00261F7A /* FriendListView.swift */; };
 		32932AA62864280100689310 /* AnimeDetailView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32932AA52864280100689310 /* AnimeDetailView.swift */; };
-		3294CBC62869473000ADD6F4 /* AddFriendView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3294CBC52869473000ADD6F4 /* AddFriendView.swift */; };
 		32A6547A2877ED7000937BA0 /* Review.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32A654792877ED7000937BA0 /* Review.swift */; };
 		32C557E428668295001AD2D7 /* AnimeSearchItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C557E328668295001AD2D7 /* AnimeSearchItem.swift */; };
 		32C557E82866984E001AD2D7 /* Poster.swift in Sources */ = {isa = PBXBuildFile; fileRef = 32C557E72866984E001AD2D7 /* Poster.swift */; };
@@ -42,12 +42,12 @@
 		3202FBDA2862AB9200C729D6 /* AnimeListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeListView.swift; sourceTree = "<group>"; };
 		326344432863AA58002AA81C /* Anime.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Anime.swift; sourceTree = "<group>"; };
 		326344482863F29C002AA81C /* SearchAnimeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchAnimeView.swift; sourceTree = "<group>"; };
+		327042F628820B990025094C /* FriendItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendItem.swift; sourceTree = "<group>"; };
 		32928F122864BA2300261F7A /* GoogleService-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "GoogleService-Info.plist"; path = "Animu/GoogleService-Info.plist"; sourceTree = SOURCE_ROOT; };
 		32928F142864BD7300261F7A /* SignupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SignupView.swift; sourceTree = "<group>"; };
 		32928F162864C0E600261F7A /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		32928F1828656E0B00261F7A /* FriendListView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendListView.swift; sourceTree = "<group>"; };
 		32932AA52864280100689310 /* AnimeDetailView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeDetailView.swift; sourceTree = "<group>"; };
-		3294CBC52869473000ADD6F4 /* AddFriendView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddFriendView.swift; sourceTree = "<group>"; };
 		32A654792877ED7000937BA0 /* Review.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Review.swift; sourceTree = "<group>"; };
 		32C557E328668295001AD2D7 /* AnimeSearchItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnimeSearchItem.swift; sourceTree = "<group>"; };
 		32C557E72866984E001AD2D7 /* Poster.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Poster.swift; sourceTree = "<group>"; };
@@ -131,9 +131,9 @@
 				32928F142864BD7300261F7A /* SignupView.swift */,
 				32C557E328668295001AD2D7 /* AnimeSearchItem.swift */,
 				32928F1828656E0B00261F7A /* FriendListView.swift */,
-				3294CBC52869473000ADD6F4 /* AddFriendView.swift */,
 				32F3134228766D5200F6663F /* CreateReviewView.swift */,
 				32F31344287692D100F6663F /* ReviewItem.swift */,
+				327042F628820B990025094C /* FriendItem.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -241,7 +241,7 @@
 				32C557E82866984E001AD2D7 /* Poster.swift in Sources */,
 				3202FBD92862A95D00C729D6 /* AnimeStore.swift in Sources */,
 				326344492863F29C002AA81C /* SearchAnimeView.swift in Sources */,
-				3294CBC62869473000ADD6F4 /* AddFriendView.swift in Sources */,
+				327042F728820B990025094C /* FriendItem.swift in Sources */,
 				3202FBDB2862AB9200C729D6 /* AnimeListView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

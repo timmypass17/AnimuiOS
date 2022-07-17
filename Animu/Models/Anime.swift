@@ -23,14 +23,14 @@ struct Anime: Codable {
         var medium: String
         var large: String
     }
-    struct AnimeGenre: Codable {
+    struct AnimeGenre: Codable, Equatable {
         var name: String
     }
     struct AnimeSeason: Codable {
         var year: Int
         var season: String
     }
-    struct AnimeStudio: Codable {
+    struct AnimeStudio: Codable, Equatable {
         var name: String
     }
 }

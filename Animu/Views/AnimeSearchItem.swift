@@ -22,9 +22,13 @@ struct AnimeSearchItem: View {
                     .font(.headline)
                 HStack {
                     ForEach(anime.genres.prefix(2), id: \.name) { genre in
-                        Text("\(genre.name) |")
-                            .foregroundColor(.secondary)
+                        if genre == anime.genres.last {
+                            Text("\(genre.name)")
+                        } else {
+                            Text("\(genre.name) |")
+                        }
                     }
+                    .foregroundColor(.secondary)
                 }
                 .padding([.bottom], 2)
                 Text(anime.synopsis)

@@ -11,42 +11,46 @@ struct FriendListView: View {
     
     @EnvironmentObject var animeStore: AnimeStore
     @State private var isPresentingAddFriendView = false
-    @State private var friend = User()
-
+    @State var friendID = ""
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
-            .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        animeStore.signOut()
-                        //isPresentingAddFriendView = true
-                        
-                    }) {
-                        Image(systemName: "plus")
-                    }
-                    
+        List {
+            HStack {
+                TextField("Enter user id", text: $friendID)
+                Button("Add friend") {
+                    animeStore.addFriend(friendID: friendID)
+                    friendID = ""
                 }
             }
-            .navigationTitle("My Friends")
-            .sheet(isPresented: $isPresentingAddFriendView) {
-                NavigationView {
-                    AddFriendView(friend: $friend)
-                        .navigationTitle("Find Friends")
-                        .toolbar {
-                            ToolbarItem(placement: .cancellationAction) {
-                                Button("Dismiss") {
-                                    isPresentingAddFriendView = false
-                                }
-                            }
-                        }
-                }
-
+            .padding(.bottom)
+            ForEach(animeStore.currentFriends, id: \.id) { friend in
+//                NavigationLink(destination: AnimeListView()                        .navigationTitle("\(friend.name)'s Anime List")){
+                    FriendItem(user: friend)
+//                }
             }
+            .onDelete { offsets in
+                animeStore.currentFriends.remove(atOffsets: offsets)
+            }
+            Spacer()
+        }
+        .listStyle(.inset)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarTrailing) {
+                Button(action: {
+                    animeStore.signOut()
+                }) {
+                    Image(systemName: "rectangle.portrait.and.arrow.right")
+                }
+                
+            }
+        }
+        .navigationTitle("My Friends")
     }
 }
 
 struct FriendListView_Previews: PreviewProvider {
     static var previews: some View {
         FriendListView()
+            .environmentObject(AnimeStore())
     }
 }

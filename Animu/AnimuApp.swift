@@ -53,6 +53,11 @@ struct AnimuApp: App {
 
                         NavigationView {
                             FriendListView()
+                                .onAppear {
+                                    print("Calling refreshFriendList()")
+                                    animeStore.refreshFriendList()
+                                    print(animeStore.currentFriends)
+                                }
                         }
                         .tabItem { Label("Friends", systemImage: "person.2.fill") }.tag(Tab.friends)
                     }

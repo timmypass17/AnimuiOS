@@ -18,6 +18,7 @@ class AnimeStore: ObservableObject {
     @Published var isSignedIn = Auth.auth().currentUser != nil
     @Published var currentUser = User()
     @Published var currentReview = Review()
+    @Published var currentFriends: [User] = []
     
     // https://api.myanimelist.net/v2/anime?q=one&fields=num_episodes
     let baseUrl = "https://api.myanimelist.net/v2"
@@ -289,4 +290,68 @@ class AnimeStore: ObservableObject {
         
     }
     
+    func refreshFriendList() {
+        let db = Firestore.firestore()
+        let id = Auth.auth().currentUser!.uid
+        
+        self.currentFriends.removeAll()
+        // 1. Get reviews collection
+        db.collection("users")
+            .document(id)
+            .getDocument { document, error in
+                guard let document = document else { return }
+                guard let user = try? document.data(as: User.self) else { return }
+                                
+                // 2. Query each friend id and add it to local friends list
+                for friendId in user.friendList {
+                    print("Adding id: \(friendId)")
+                    db.collection("users")
+                        .document(friendId)
+                        .getDocument { doc, err in
+                            guard let doc = doc else { return }
+                            guard let friend = try? doc.data(as: User.self) else { return }
+                            print("Adding friend: \(friend.name)")
+                            self.currentFriends.append(friend)
+//                            self.currentFriends = self.currentFriends.sorted(by: { $0.name > $1.name })
+                        }
+                }
+            }
+    }
+    
+    func addFriend(friendID: String) {
+        let db  = Firestore.firestore()
+        let id = Auth.auth().currentUser!.uid
+        
+        // 1. Get current user
+        var updatedUser = User()
+        db.collection("users")
+            .document(id)
+            .getDocument { document, error in
+                guard let document = document else { return }
+                guard let user = try? document.data(as: User.self) else { return }
+                
+                // 2. Update current user's friend list
+                updatedUser = user
+                updatedUser.friendList.append(friendID)
+                self.currentUser = updatedUser
+                do {
+                    try db.collection("users")
+                        .document(id)
+                        .setData(from: updatedUser)
+                } catch {
+                    print("addFriend: Error with updating user's friend list")
+                }
+                
+                // 3. Add friend to local friendlist
+                db.collection("users")
+                    .document(friendID)
+                    .getDocument { doc, err in
+                        guard let doc = doc else { return }
+                        guard let friend = try? document.data(as: User.self) else { return }
+                        self.currentFriends.append(friend)
+                        self.currentFriends = self.currentFriends.sorted(by: { $0.name > $1.name })
+                    }
+
+            }
+    }
 }
