@@ -1,5 +1,5 @@
-# Animu
-An iOS App to track and review anime/tv shows.Built using Swift, SwiftUI, Firebase (Auth, Storage)
+# Animu - iOS App
+App to track and review anime/tv shows. Built using Swift, SwiftUI, Firebase (Auth, Storage)
 
 ## Screenshots (4)
 <p float="left">
