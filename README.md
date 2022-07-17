@@ -1,5 +1,5 @@
 # AnimuiOS
-An iOS app to write reviews and track animes/tv show. Built using Swift, SwiftUI, Firebase (Auth, Storage)
+An iOS App to track and review anime/tv shows.Built using Swift, SwiftUI, Firebase (Auth, Storage)
 
 ## Screenshots (4)
 <p float="left">
